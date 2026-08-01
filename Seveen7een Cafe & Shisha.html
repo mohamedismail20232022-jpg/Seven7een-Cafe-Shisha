@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seven7een Cafe & Shisha — Cairo</title>
+<meta name="description" content="Seven7een Cafe — a garden terrace cafe and shisha lounge in Cairo. Coffee, breakfast, shisha and desserts, served under the trees.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root{
+    --bg:#161210;
+    --bg-alt:#1e1712;
+    --panel:#211a15;
+    --line: rgba(239,230,211,0.12);
+    --cream:#EFE6D3;
+    --cream-dim: rgba(239,230,211,0.62);
+    --gold:#D4A64A;
+    --gold-bright:#F3CE7B;
+    --shadow: 0 20px 50px rgba(0,0,0,0.45);
+    --radius: 4px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x: hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  h1,h2,h3,h4{ font-family:'Fraunces', serif; margin:0; font-weight:700; }
+  
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--gold);
+  }
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  section{ position:relative; padding: 100px 0; }
+  ::selection{ background:var(--gold); color:#1a1410; }
+
+  /* Preloader */
+  #preloader { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+  .loader { border: 3px solid var(--line); border-top: 3px solid var(--gold); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  /* Scroll Animations */
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    background:linear-gradient(to bottom, rgba(15,12,10,0.9), rgba(15,12,10,0));
+    transition: all .35s ease;
+  }
+  .nav.scrolled{
+    background: rgba(17,13,11,0.95);
+    backdrop-filter: blur(10px);
+    padding:14px 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:700; font-size:1.35rem; letter-spacing:0.01em; }
+  .brand .num{ color:var(--gold); font-style:italic; font-weight:600; }
+  .brand small{ display:block; font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.24em; color:var(--cream-dim); font-weight:400; margin-top:2px; }
+  .nav-links{ display:flex; align-items:center; gap:34px; }
+  .nav-links a{
+    font-size:0.85rem; letter-spacing:0.04em; text-transform:uppercase; color:var(--cream-dim);
+    position:relative; padding-bottom:4px; transition: color .25s ease;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold);
+    transition: width .3s ease;
+  }
+  .nav-links a:hover{ color:var(--cream); }
+  .nav-links a:hover::after{ width:100%; }
+  
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 26px; font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+    letter-spacing:0.08em; text-transform:uppercase; border-radius:var(--radius);
+    transition: all .25s ease; cursor: pointer; border: none; outline: none;
+  }
+  .btn-solid{ background:var(--gold); color:#1a1410; font-weight: 600;}
+  .btn-solid:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(212,166,74,0.3); }
+  .btn-ghost{ border:1px solid rgba(239,230,211,0.35); color:var(--cream); background: transparent;}
+  .btn-ghost:hover{ border-color:var(--cream); transform:translateY(-2px); }
+
+  .nav-cta{ padding:9px 18px; font-size:0.72rem; }
+  
+  .burger{ display:none; flex-direction:column; gap:5px; background:none; border:0; cursor:pointer; padding:6px; z-index: 101;}
+  .burger span{ width:24px; height:2px; background:var(--cream); display:block; transition:.3s; }
+  .burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.active span:nth-child(2) { opacity: 0; }
+  .burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; align-items:flex-end;
+    position:relative;
+    background: linear-gradient(to top, rgba(12,10,8,0.96) 0%, rgba(12,10,8,0.45) 46%, rgba(10,9,7,0.35) 70%, rgba(8,7,6,0.65) 100%), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80') center 30%/cover no-repeat;
+    padding: 160px 0 72px;
+  }
+  .hero-inner{ max-width:760px; }
+  .hero .eyebrow{ margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .hero .eyebrow::before{ content:''; width:26px; height:1px; background:var(--gold); display:inline-block; }
+  .hero h1{
+    font-size:clamp(3.4rem, 9vw, 6.4rem); line-height:0.95; color:var(--gold-bright);
+    text-shadow: 0 0 6px rgba(243,206,123,0.55), 0 0 22px rgba(212,166,74,0.35), 0 0 48px rgba(212,166,74,0.18);
+    animation: signFlicker 7s infinite;
+  }
+  .hero h1 em{ font-style:italic; font-weight:500; color:var(--cream); text-shadow:none; }
+  @keyframes signFlicker{
+    0%, 3%, 6%, 100%{ opacity:1; } 4%{ opacity:0.82; } 5%{ opacity:0.97; }
+  }
+  .hero p.lede{ margin-top:22px; max-width:44ch; font-size:1.08rem; color:var(--cream-dim); font-weight:300; }
+  .hero-actions{ display:flex; gap:16px; margin-top:38px; flex-wrap:wrap; }
+
+  /* ---------- ABOUT ---------- */
+  .about{ background:var(--bg); }
+  .about-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:70px; align-items:center; }
+  .head h2{ font-size:clamp(2.1rem,4vw,3rem); margin-top:14px; color:var(--cream); margin-bottom: 20px;}
+  .about-copy p{ color:var(--cream-dim); font-weight:300; margin:0 0 16px; }
+  .feature-list{ margin-top:36px; display:grid; grid-template-columns:1fr 1fr; gap:20px 28px; }
+  .feature-list li{ display:flex; gap:12px; align-items:flex-start; font-size:0.92rem; color:var(--cream); }
+  .feature-list i{ color:var(--gold); margin-top: 4px;}
+  .about-frame{ position:relative; border:1px solid var(--line); padding:14px; background:var(--panel); }
+  .about-frame img{ width:100%; height:460px; object-fit:cover; filter:saturate(1.05) contrast(1.03); }
+
+  /* ---------- MENU ---------- */
+  .menu{ background:var(--bg-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .tabs{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px; }
+  .tab{
+    background:none; border:1px solid var(--line); color:var(--cream-dim);
+    font-family:'JetBrains Mono',monospace; font-size:0.74rem; letter-spacing:0.06em; text-transform:uppercase;
+    padding:11px 18px; cursor:pointer; transition:.25s ease;
+  }
+  .tab:hover{ color:var(--cream); border-color:rgba(239,230,211,0.4); }
+  .tab.active{ background:var(--gold); border-color:var(--gold); color:#1a1410; font-weight: bold;}
+
+  .menu-panel{ display:none; animation:fadeUp .5s ease; }
+  .menu-panel.active{ display:block; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(15px);} to{ opacity:1; transform:translateY(0);} }
+
+  .menu-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px 56px; }
+  .menu-item{ display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px dotted rgba(239,230,211,0.2); }
+  .item-text .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem; color:var(--cream); }
+  .item-text .desc{ font-size:0.82rem; color:var(--cream-dim); margin-top:4px; font-weight:300; }
+  .item-price{ font-family:'JetBrains Mono',monospace; color:var(--gold-bright); font-size:0.95rem; }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testimonials { background: var(--bg); text-align: center; }
+  .reviews-container { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; scrollbar-width: none;}
+  .reviews-container::-webkit-scrollbar { display: none; }
+  .review-card { flex: 0 0 300px; scroll-snap-align: start; background: var(--panel); border: 1px solid var(--line); padding: 30px; text-align: left; border-radius: var(--radius); }
+  .review-stars { color: var(--gold); margin-bottom: 15px; font-size: 0.9rem;}
+  .review-text { color: var(--cream-dim); font-style: italic; font-weight: 300; margin-bottom: 20px; font-size: 0.95rem;}
+  .review-author { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--gold-bright); text-transform: uppercase;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{ background:var(--bg-alt); border-top:1px solid var(--line); }
+  .gal-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:20px; }
+  .gal-grid figure{ margin:0; position:relative; overflow:hidden; border:1px solid var(--line); border-radius: var(--radius);}
+  .gal-grid img{ width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+  .gal-grid figure:hover img{ transform:scale(1.05); }
+  .gal-tall{ grid-row: span 2; }
+  .gal-tall img{ height:100%; min-height:520px; }
+  .gal-grid figcaption{
+    position:absolute; left:0; bottom:0; right:0; padding:16px 18px;
+    background:linear-gradient(to top, rgba(10,8,7,0.85), transparent);
+    font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; color:var(--cream-dim); text-transform:uppercase;
+  }
+  .gal-side{ display:grid; gap:20px; }
+  .gal-side figure img{ height:250px; }
+
+  /* ---------- FAQ ---------- */
+  .faq { background: var(--bg); }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-question { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; color: var(--cream); font-family: 'Fraunces', serif; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .faq-question i { color: var(--gold); transition: transform 0.3s ease; }
+  .faq-question.active i { transform: rotate(180deg); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; color: var(--cream-dim); font-weight: 300; }
+  .faq-answer p { padding-bottom: 24px; }
+
+  /* ---------- VISIT & RESERVATION ---------- */
+  .visit{ background:var(--bg-alt); border-top:1px solid var(--line); }
+  .visit-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; }
+  
+  .res-form { background: var(--panel); padding: 40px; border: 1px solid var(--line); border-radius: var(--radius); height: fit-content; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; }
+  .form-group input, .form-group select { width: 100%; background: var(--bg); border: 1px solid var(--line); padding: 12px 15px; color: var(--cream); font-family: inherit; outline: none; border-radius: 2px;}
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  
+  .info-block{ margin-bottom:34px; }
+  .info-block h4{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .hours-row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:0.9rem; color:var(--cream-dim); }
+  .hours-row span:last-child{ font-family:'JetBrains Mono',monospace; color:var(--cream); }
+  .contact-line{ display:flex; gap:10px; align-items:baseline; font-size:0.94rem; margin-bottom:10px; color:var(--cream); }
+  .contact-line i { color: var(--gold); font-size: 0.9rem; width: 20px;}
+
+  /* ---------- FOOTER & NEWSLETTER ---------- */
+  footer{ background:#100d0b; padding:80px 0 30px; border-top:1px solid var(--line); }
+  .footer-grid{ display:grid; grid-template-columns:1.5fr 1fr 1.5fr; gap:40px; margin-bottom:60px; }
+  .footer-brand p{ color:var(--cream-dim); font-weight:300; font-size:0.9rem; margin-top:14px; max-width:32ch; }
+  .footer-col h5{ font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+  .footer-col a{ display:block; color:var(--cream-dim); font-size:0.88rem; margin-bottom:10px; transition:color .2s; }
+  .footer-col a:hover{ color:var(--gold-bright); }
+  
+  .newsletter-form { display: flex; margin-top: 15px; }
+  .newsletter-form input { flex: 1; padding: 12px 15px; background: var(--panel); border: 1px solid var(--line); color: #fff; outline: none; }
+  .newsletter-form button { background: var(--gold); border: none; padding: 0 20px; cursor: pointer; color: var(--bg); font-weight: bold; transition: 0.3s; }
+  .newsletter-form button:hover { background: var(--gold-bright); }
+
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:24px; font-size:0.76rem; color:var(--cream-dim); font-family:'JetBrains Mono',monospace; }
+
+  /* Floating WhatsApp */
+  .whatsapp-btn { position: fixed; bottom: 30px; left: 30px; background: #25D366; color: #fff; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 1000; transition: transform 0.3s ease; text-decoration: none;}
+  .whatsapp-btn:hover { transform: scale(1.1) translateY(-5px); color: #fff; }
+
+  @media (max-width:820px){
+    .about-grid, .gal-grid, .visit-grid, .footer-grid { grid-template-columns:1fr; }
+    .about-frame img{ height:320px; }
+    .nav-links{ display:none; }
+    .burger{ display:flex; }
+    .menu-grid { grid-template-columns: 1fr; }
+  }
+
+  /* mobile nav drawer */
+  .nav-links.open{
+    display:flex; position:fixed; inset:0 0 0 auto; width:75%; max-width:300px;
+    background:#141110; flex-direction:column; align-items:flex-start; padding:100px 32px 40px; gap:26px;
+    box-shadow:-20px 0 40px rgba(0,0,0,0.7);
+  }
+</style>
+</head>
+<body>
+
+<!-- Feature 1: Preloader -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- Feature 4: Floating WhatsApp -->
+<a href="https://wa.me/201000000000" target="_blank" class="whatsapp-btn" aria-label="Chat on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Feature 8: Sticky Smart Navbar & Feature 9: Mobile Burger Menu -->
+<nav class="nav" id="nav">
+  <a href="#top" class="brand">
+    <span>Seven<span class="num">7</span>een<small>CAFE & SHISHA</small></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#visit" class="btn btn-ghost nav-cta">Reserve</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner reveal">
+    <div class="eyebrow">Cairo · Est. Terrace & Garden Lounge</div>
+    <h1>Seven<em>teen</em></h1>
+    <p class="lede">A garden terrace tucked under the trees — coffee by day, shisha and slow evenings by night. Cairo's living room, outdoors.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn btn-solid">Explore Menu</a>
+      <a href="#visit" class="btn btn-ghost">Book a Table</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Feature 2: Scroll Animations (Reveal classes added globally) -->
+  <section class="about" id="about">
+    <div class="wrap about-grid reveal">
+      <div class="about-copy">
+        <div class="eyebrow">About the house</div>
+        <h2>Coffee, shade, and the hum of the street</h2>
+        <p>Seven7een sits behind a wall of green — fairy lights strung through the branches, low wooden tables, and a menu built for lingering. It's the kind of place you come for one coffee and stay for three.</p>
+        <p>By evening the terrace turns into Cairo's living room: shisha coals glowing, football on the screens, and a kitchen that keeps going well past midnight.</p>
+        <ul class="feature-list">
+          <li><i class="fas fa-leaf"></i> Open-air garden terrace</li>
+          <li><i class="fas fa-wind"></i> Shisha & premium tobacco</li>
+          <li><i class="fas fa-tv"></i> Live sports on screens</li>
+          <li><i class="fas fa-wifi"></i> Free high-speed WiFi</li>
+          <li><i class="fas fa-users"></i> Family & group friendly</li>
+          <li><i class="fas fa-clock"></i> Kitchen open till late</li>
+        </ul>
+      </div>
+      <div class="about-frame">
+        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80" alt="Cafe Terrace">
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature 3: Interactive Menu Tabs & Expanded Menu Items -->
+  <section class="menu reveal" id="menu">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">The menu</div>
+        <h2>Something for every hour</h2>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="hot">Hot Drinks</button>
+        <button class="tab" data-tab="cold">Cold Drinks</button>
+        <button class="tab" data-tab="shisha">Shisha</button>
+        <button class="tab" data-tab="breakfast">Breakfast</button>
+        <button class="tab" data-tab="appetizers">Appetizers</button>
+        <button class="tab" data-tab="mains">Main Courses</button>
+        <button class="tab" data-tab="pizza-pasta">Pizza & Pasta</button>
+        <button class="tab" data-tab="desserts">Desserts</button>
+      </div>
+
+      <!-- HOT DRINKS -->
+      <div class="menu-panel active" data-panel="hot">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Turkish Coffee</div><div class="desc">Sada, mazbout or ziyada</div></div><div class="item-price"><sup>EGP</sup>45</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Double Espresso</div><div class="desc">Pure dark roast energy</div></div><div class="item-price"><sup>EGP</sup>55</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Spanish Latte</div><div class="desc">Condensed milk, house blend</div></div><div class="item-price"><sup>EGP</sup>75</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Classic Cappuccino</div><div class="desc">Rich espresso with steamed milk foam</div></div><div class="item-price"><sup>EGP</sup>65</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Americano</div><div class="desc">Slow-poured, full cup</div></div><div class="item-price"><sup>EGP</sup>50</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Sahlab</div><div class="desc">Topped with mixed nuts and cinnamon</div></div><div class="item-price"><sup>EGP</sup>60</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Moroccan Mint Tea</div><div class="desc">Fresh mint, pine nuts</div></div><div class="item-price"><sup>EGP</sup>55</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Hot Apple Cider</div><div class="desc">Warm spiced apple juice</div></div><div class="item-price"><sup>EGP</sup>70</div></div>
+        </div>
+      </div>
+
+      <!-- COLD DRINKS -->
+      <div class="menu-panel" data-panel="cold">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Energy Dose Smoothie</div><div class="desc">Avocado, banana, kiwi, pomegranate, guava, honey & mixed nuts</div></div><div class="item-price"><sup>EGP</sup>110</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Iced Latte</div><div class="desc">Double shot over ice</div></div><div class="item-price"><sup>EGP</sup>80</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Mango Smoothie</div><div class="desc">Fresh seasonal mango</div></div><div class="item-price"><sup>EGP</sup>95</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Fresh Lemon & Mint</div><div class="desc">Muddled, over crushed ice</div></div><div class="item-price"><sup>EGP</sup>60</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Watermelon Cooler</div><div class="desc">Fresh pressed, mint</div></div><div class="item-price"><sup>EGP</sup>75</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Lotus Milkshake</div><div class="desc">Lotus Biscoff, vanilla ice cream</div></div><div class="item-price"><sup>EGP</sup>105</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Classic Mojito</div><div class="desc">Lime, mint, soda water</div></div><div class="item-price"><sup>EGP</sup>70</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Iced Caramel Macchiato</div><div class="desc">Espresso, milk, caramel drizzle</div></div><div class="item-price"><sup>EGP</sup>85</div></div>
+        </div>
+      </div>
+
+      <!-- SHISHA -->
+      <div class="menu-panel" data-panel="shisha">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Classic Double Apple (Tofahaityn)</div><div class="desc">The house standard</div></div><div class="item-price"><sup>EGP</sup>150</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Grape & Mint</div><div class="desc">Fan favourite blend</div></div><div class="item-price"><sup>EGP</sup>170</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Fakhfakhina</div><div class="desc">Fresh fruit head, house special</div></div><div class="item-price"><sup>EGP</sup>220</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Watermelon Mint</div><div class="desc">Refreshing and sweet</div></div><div class="item-price"><sup>EGP</sup>160</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Blue Mist</div><div class="desc">Blueberry and cool mint</div></div><div class="item-price"><sup>EGP</sup>175</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Ice Gum</div><div class="desc">Pure icy mint</div></div><div class="item-price"><sup>EGP</sup>150</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Premium Flavour Mix</div><div class="desc">Ask your server for tonight's mix</div></div><div class="item-price"><sup>EGP</sup>180</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Extra Head Change</div><div class="desc">Fresh tobacco, same session</div></div><div class="item-price"><sup>EGP</sup>90</div></div>
+        </div>
+      </div>
+
+      <!-- BREAKFAST -->
+      <div class="menu-panel" data-panel="breakfast">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Egyptian Breakfast Plate</div><div class="desc">Foul, falafel, cheese with tomato, baladi bread</div></div><div class="item-price"><sup>EGP</sup>120</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">English Breakfast</div><div class="desc">Eggs, beef sausage, baked beans, mushrooms, toast</div></div><div class="item-price"><sup>EGP</sup>185</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Classic Omelette</div><div class="desc">Served with side salad and wedges</div></div><div class="item-price"><sup>EGP</sup>110</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Shakshuka</div><div class="desc">Slow-cooked tomato, peppers, eggs</div></div><div class="item-price"><sup>EGP</sup>125</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Fluffy Pancakes</div><div class="desc">Maple syrup, seasonal fruit</div></div><div class="item-price"><sup>EGP</sup>130</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Feteer Meshaltet</div><div class="desc">Served with honey and old cheese (Mesh)</div></div><div class="item-price"><sup>EGP</sup>140</div></div>
+        </div>
+      </div>
+
+      <!-- APPETIZERS -->
+      <div class="menu-panel" data-panel="appetizers">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Crispy Chicken Wings</div><div class="desc">Six pieces, tossed in BBQ or Buffalo sauce</div></div><div class="item-price"><sup>EGP</sup>170</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Mozzarella Sticks</div><div class="desc">Fried to perfection, marinara dip</div></div><div class="item-price"><sup>EGP</sup>135</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Chicken Strips</div><div class="desc">Crispy tenders with honey mustard</div></div><div class="item-price"><sup>EGP</sup>155</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Loaded Nachos</div><div class="desc">Cheese sauce, jalapeño, pico de gallo</div></div><div class="item-price"><sup>EGP</sup>145</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Cheesy Fries</div><div class="desc">Skin-on fries loaded with cheddar sauce</div></div><div class="item-price"><sup>EGP</sup>95</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Halloumi Bites</div><div class="desc">Grilled, honey drizzle</div></div><div class="item-price"><sup>EGP</sup>140</div></div>
+        </div>
+      </div>
+
+      <!-- MAIN COURSES -->
+      <div class="menu-panel" data-panel="mains">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Traditional Bukhari Chicken</div><div class="desc">Juicy half chicken, Bukhari rice, toasted nuts</div></div><div class="item-price"><sup>EGP</sup>280</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Grilled Beef Steak</div><div class="desc">Served with mashed potatoes and pepper sauce</div></div><div class="item-price"><sup>EGP</sup>420</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Chicken Fajita Sizzler</div><div class="desc">Peppers, onions, tortillas, sour cream</div></div><div class="item-price"><sup>EGP</sup>290</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Crispy Fried Chicken Plate</div><div class="desc">Served with coleslaw and fries</div></div><div class="item-price"><sup>EGP</sup>240</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Club Sandwich</div><div class="desc">Chicken, beef bacon, egg, fries</div></div><div class="item-price"><sup>EGP</sup>195</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Beef Burger Classic</div><div class="desc">Cheddar, lettuce, tomato, house sauce</div></div><div class="item-price"><sup>EGP</sup>220</div></div>
+        </div>
+      </div>
+
+      <!-- PIZZA & PASTA -->
+      <div class="menu-panel" data-panel="pizza-pasta">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Chicken Alfredo Pasta</div><div class="desc">Creamy mushroom sauce, parmesan</div></div><div class="item-price"><sup>EGP</sup>190</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Penne Bolognese</div><div class="desc">Rich minced beef tomato sauce</div></div><div class="item-price"><sup>EGP</sup>185</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Pizza Margherita</div><div class="desc">Fresh basil, mozzarella, tomato sauce</div></div><div class="item-price"><sup>EGP</sup>160</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">BBQ Chicken Pizza</div><div class="desc">Grilled chicken, red onions, BBQ drizzle</div></div><div class="item-price"><sup>EGP</sup>210</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Pepperoni Pizza</div><div class="desc">Beef pepperoni, extra cheese</div></div><div class="item-price"><sup>EGP</sup>195</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Seafood Pasta</div><div class="desc">Shrimp, calamari in pink sauce</div></div><div class="item-price"><sup>EGP</sup>240</div></div>
+        </div>
+      </div>
+
+      <!-- DESSERTS -->
+      <div class="menu-panel" data-panel="dessert">
+        <div class="menu-grid">
+          <div class="menu-item"><div class="item-text"><div class="name">Traditional Areeka</div><div class="desc">Dates, cream, topped with cashews & almonds</div></div><div class="item-price"><sup>EGP</sup>145</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">70% Dark Chocolate Lava Cake</div><div class="desc">Pure dark chocolate, served with vanilla ice cream</div></div><div class="item-price"><sup>EGP</sup>155</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Baked Cheesecake</div><div class="desc">Berry compote or Lotus drizzle</div></div><div class="item-price"><sup>EGP</sup>120</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Umm Ali</div><div class="desc">Egyptian classic, baked with nuts and cream</div></div><div class="item-price"><sup>EGP</sup>100</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Nutella Waffle</div><div class="desc">Freshly baked, loaded with chocolate</div></div><div class="item-price"><sup>EGP</sup>115</div></div>
+          <div class="menu-item"><div class="item-text"><div class="name">Kunafa</div><div class="desc">Warm, filled with cream or nuts</div></div><div class="item-price"><sup>EGP</sup>140</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Feature 6: Testimonials -->
+  <section class="testimonials reveal" id="reviews">
+    <div class="wrap">
+      <div class="head" style="margin: 0 auto 40px; text-align: center;">
+        <div class="eyebrow" style="justify-content: center;">Testimonials</div>
+        <h2>What our guests say</h2>
+      </div>
+      <div class="reviews-container">
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="review-text">"Best shisha in Cairo! The outdoor vibe is unmatched, and their Spanish Latte is a must-try. Totally my new spot."</p>
+          <div class="review-author">— Ahmed Hassan</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="review-text">"Watched the Champions League final here. The screens are everywhere, service is super fast even when it's packed."</p>
+          <div class="review-author">— Youssef Tarek</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+          <p class="review-text">"Great place to work during the day. Fast WiFi, good coffee, and lots of greenery. The staff is extremely polite."</p>
+          <div class="review-author">— Nada Ikram</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery reveal" id="gallery">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">A look inside</div>
+        <h2>The terrace, after dark</h2>
+      </div>
+      <div class="gal-grid">
+        <figure class="gal-tall">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80" alt="Cafe interior">
+          <figcaption>Cozy Evenings</figcaption>
+        </figure>
+        <div class="gal-side">
+          <figure>
+            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80" alt="Coffee preparation">
+            <figcaption>Specialty Brews</figcaption>
+          </figure>
+          <figure>
+            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80" alt="Latte Art">
+            <figcaption>Perfect Pours</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature 7: FAQ Accordion -->
+  <section class="faq reveal" id="faq">
+    <div class="wrap" style="max-width: 800px;">
+      <div class="head" style="text-align: center; margin: 0 auto 40px;">
+        <div class="eyebrow" style="justify-content: center;">Got Questions?</div>
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">Do you have parking available? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Yes! We offer free valet parking for all our guests right at the entrance.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Do you show live football matches? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Absolutely. We broadcast all major local and international matches on 4K screens scattered across the terrace.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I work from the cafe? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Of course. We have free high-speed WiFi and plenty of power outlets near the corner tables. Mornings are especially quiet.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature 5: Reservation Form & Google Maps -->
+  <section class="visit reveal" id="visit">
+    <div class="wrap visit-grid">
+      <div class="res-form">
+        <h3 style="margin-bottom: 25px; color: var(--gold-bright);">Book a Table</h3>
+        <form id="reservationForm" onsubmit="event.preventDefault(); alert('Reservation Request Sent!');">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="01X XXXX XXXX" required>
+          </div>
+          <div style="display:flex; gap: 15px;">
+            <div class="form-group" style="flex:1;">
+              <label>Date</label>
+              <input type="date" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label>Guests</label>
+              <select required>
+                <option>1-2 People</option>
+                <option>3-4 People</option>
+                <option>5-8 People</option>
+                <option>8+ People</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-solid" style="width: 100%; justify-content: center;">Confirm Request</button>
+        </form>
+      </div>
+
+      <div class="visit-info">
+        <div class="head" style="margin-bottom: 20px;">
+          <div class="eyebrow">Come by</div>
+          <h2>Find us in Cairo</h2>
+        </div>
+        
+        <div class="info-block">
+          <!-- اللينك اللي بيفتح جوجل مابس على طول -->
+          <div class="contact-line">
+            <i class="fas fa-map-marker-alt" style="margin-top: 5px;"></i> 
+            <a href="https://maps.app.goo.gl/fhtqmncvtvirxrsr5" target="_blank" style="color: var(--gold-bright); text-decoration: underline; line-height: 1.4;">
+              ميدان الحجاز، عند الأمن الصناعي بجوار أسواق عبد العزيز، مصر الجديدة
+            </a>
+          </div>
+          <div class="contact-line"><i class="fas fa-phone"></i> <a href="tel:+201000000000" style="transition: color 0.3s;">+20 100 000 0000</a></div>
+        </div>
+
+        <div class="info-block" style="margin-bottom: 20px;">
+          <h4>Opening Hours</h4>
+          <div class="hours-row"><span>Sat - Wed</span><span>09:00 AM - 01:00 AM</span></div>
+          <div class="hours-row today"><span>Thu - Fri</span><span>09:00 AM - 03:00 AM</span></div>
+        </div>
+
+        <!-- خريطة جوجل التفاعلية جوه الموقع -->
+        <div class="map-frame" style="border-radius: var(--radius); overflow: hidden; height: 250px; border: 1px solid var(--line);">
+          <iframe 
+            src="https://maps.google.com/maps?q=أسواق%20عبد%20العزيز%20ميدان%20الحجاز%20مصر%20الجديدة&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            style="border:0; filter: contrast(1.1) grayscale(0.2);" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand" style="color:var(--cream);">Seven<span class="num">7</span>een</span>
+        <p>The perfect blend of modern comfort and classic Egyptian hospitality. Quality coffee, premium shisha, and good vibes.</p>
+        <!-- Feature 10: Newsletter -->
+        <h5 style="margin-top: 25px; color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase;">Join our Newsletter</h5>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Your Email Address" required>
+          <button type="submit">SUBSCRIBE</button>
+        </form>
+      </div>
+      <div class="footer-col">
+        <h5>Links</h5>
+        <a href="#about">About us</a>
+        <a href="#menu">Menu</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h5>Socials</h5>
+        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+        <a href="#"><i class="fab fa-tiktok"></i> TikTok</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Seven7een Cafe & Shisha. All rights reserved.</span>
+      <span>Designed with ❤️ in Cairo</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 1. Preloader removal
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    preloader.style.opacity = '0';
+    setTimeout(() => preloader.remove(), 500);
+  });
+
+  // 2. Sticky Navbar on Scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 50) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+
+  // 3. Mobile Burger Menu Toggle
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    burger.classList.toggle('active');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      burger.classList.remove('active');
+    });
+  });
+
+  // 4. Interactive Menu Tabs
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // إخفاء كله الأول
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      
+      // إظهار التاب والبانل اللي اداس عليهم
+      tab.classList.add('active');
+      const targetPanel = document.querySelector(`.menu-panel[data-panel="${tab.dataset.tab}"]`);
+      if(targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    });
+  });
+
+  // 5. FAQ Accordion Logic
+  const faqs = document.querySelectorAll('.faq-question');
+  faqs.forEach(faq => {
+    faq.addEventListener('click', () => {
+      faq.classList.toggle('active');
+      const answer = faq.nextElementSibling;
+      if(faq.classList.contains('active')){
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      } else {
+        answer.style.maxHeight = '0';
+      }
+    });
+  });
+
+  // 6. Animate on Scroll (Intersection Observer)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
